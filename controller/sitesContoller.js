@@ -24,11 +24,21 @@ async function addSite(req,res){
 }
 
 async function home(req,res){
-        
         let folder = req.body.folder
         await siteModel.find({$and:[{folder:folder},{mobileNumber:req.user.mobileNumber}]},{__v:0}/*projection*/,function (err, documents)/*callback*/ {
             if (err)  return res.sendStatus(401).send(err)
-            else return res.send(documents)}).clone(    )
+            else{
+                if(documents.length==0){
+                    return res.send(`No sites in ${folder} category!`)
+                }
+                return res.send(documents)
+            } }).clone()
 }
 
-module.exports={addSite,home}
+async function selectedSite(req,res){   // opening selected site details using siteName along with userName
+    await siteModel.find({$and:[{mobileNumber:req.user.mobileNumber},{siteName:req.body.siteName},{userName:req.body.userName}]},{__v:0}/*projection*/,function (err, documents)/*callback*/ {
+        if (err)  return res.sendStatus(401).send(err)
+        else return res.send(documents)}).clone()
+}
+
+module.exports={addSite,home,selectedSite}
