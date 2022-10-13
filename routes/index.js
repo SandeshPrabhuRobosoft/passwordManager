@@ -1,14 +1,16 @@
 const express=require('express')
+const authorization=require('../middleware/authorization')
 const signup=require('../controller/signupController')
 const signin=require('../controller/signinController')
-const {addSite}=require('../controller/sitesContoller')
-const authorization=require('../middleware/authorization')
+const {addSite,home}=require('../controller/sitesContoller')
+
 
 const router=express.Router()
 
 router.post('/signup',signup)
 router.post('/signin',signin)
 router.post('/home/addSite',authorization,addSite)
+router.post('/home',authorization,home)
 
 // const model=require('../models/user')
 

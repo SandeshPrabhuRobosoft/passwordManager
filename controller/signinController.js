@@ -13,7 +13,7 @@ async function signin(req, res) {
   try {
     if(await bcrypt.compare(req.body.MPin.toString(), user.MPin)) {
     const token = jwt.sign({ mobileNumber: user.mobileNumber }, process.env.JWTPRIVATEKEY, {expiresIn: "7d",});
-		res.status(200).send({ token: token, message: "logged in successfully" });
+		res.status(200).send({ token: token, message: "logged in successfully" }); 
     } else {
       res.send('Not Allowed')
     }

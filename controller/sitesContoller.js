@@ -23,4 +23,12 @@ async function addSite(req,res){
         }})
 }
 
-module.exports={addSite}
+async function home(req,res){
+        
+        let folder = req.body.folder
+        await siteModel.find({$and:[{folder:folder},{mobileNumber:req.user.mobileNumber}]},{__v:0}/*projection*/,function (err, documents)/*callback*/ {
+            if (err)  return res.sendStatus(401).send(err)
+            else return res.send(documents)}).clone(    )
+}
+
+module.exports={addSite,home}
