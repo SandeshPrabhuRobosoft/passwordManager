@@ -8,7 +8,9 @@ async function signin(req, res) {
     return res.status(400).send('Cannot find user')
   try {
     if(await bcrypt.compare(req.body.MPin.toString(), user.MPin)) {
-      res.send('Success')
+    const token = user.generateAuthToken();
+		res.status(200).send({ token: token, message: "logged in successfully" });
+
     } else {
       res.send('Not Allowed')
     }

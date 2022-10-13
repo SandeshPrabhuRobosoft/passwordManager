@@ -6,7 +6,8 @@ if(process.env.NODE_ENV !== 'production'){
 
 async function signup(req,res){
     if(req.body.MPin.toString().length!=4) return res.send("Enter a valid 4-digit MPin")
-    const hashedPassword = await bcrypt.hash(req.body.MPin.toString(), process.env.SALT)
+    const salt = await bcrypt.genSalt(Number(process.env.SALT));
+    const hashedPassword = await bcrypt.hash(req.body.MPin.toString(), salt)
     const user = new model({ mobileNumber: req.body.mobileNumber, MPin: hashedPassword })
 //     let {mobileValidation, MPinValidation} = validation(user)
 //     if(mobileValidation==true && MPinValidation==true){
@@ -22,7 +23,10 @@ async function signup(req,res){
 //     }
     await user.save((err)=>{
         if(err) res.send(err)
-        else res.send('Congrats!!! Success\nSignin to access the vault')})
+        else {
+            res.send('Congrats!!! Success\nSignin to access the vault')
+    
+        }})
 }
 
 module.exports=signup

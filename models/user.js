@@ -1,4 +1,8 @@
 const mongoose=require('mongoose')
+const jwt = require("jsonwebtoken");
+if(process.env.NODE_ENV !== 'production'){
+    require('dotenv').config()
+}
 const userSchema = new mongoose.Schema({
     mobileNumber: {
         type: Number,
@@ -17,4 +21,12 @@ const userSchema = new mongoose.Schema({
         required:true
     }
 });
+
+userSchema.methods.generateAuthToken = function () {
+	const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
+		expiresIn: "7d",
+	});
+	return token;
+};
+
 module.exports=mongoose.model('userCollection',userSchema)
