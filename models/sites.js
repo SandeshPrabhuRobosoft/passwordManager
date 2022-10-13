@@ -1,11 +1,12 @@
 const mongoose=require('mongoose')
-var siteSchema = new Schema({
+var siteSchema = new mongoose.Schema({
+    mobileNumber:{ 
+        type:Number
+        // type:mongoose.Schema.Types.ObjectId,
+        //  ref:'userCollection'
+        },
     URL: { 
         type: String,
-        validate: { 
-            validator: value => validator.isURL(value, { protocols: ['http','https','ftp'], require_tld: true, require_protocol: true }),
-            message: 'Must be a Valid URL' 
-            },
         required: true
         },
     siteName: {
@@ -19,13 +20,12 @@ var siteSchema = new Schema({
     userName:{
         type: String, 
         required: true, 
-        unique: true
     },
     password: {
         type: String,
         required: true 
     },
-    Notes:{
+    notes:{
         type: String,
     }
   })
