@@ -29,4 +29,5 @@ var siteSchema = new mongoose.Schema({
         type: String,
     }
   })
+  siteSchema.index({'$**': 'text'})
   module.exports = mongoose.model('siteCollection', siteSchema);

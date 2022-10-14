@@ -38,19 +38,14 @@ async function home(req,res){
 }
 
 async function search(req,res){
-    // let search=req.query.search
-
-    // var regex = new RegExp(search, 'i');  // 'i' makes it case insensitive
-
-    // await siteModel.find({$and:[{$search:{$text: /Sandesh/i}},{mobileNumber:req.user.mobileNumber}]}, function(err,data){
-    //     if(err) return res.send(err)
-    //     return res.send(data);
-    // }).clone();
+    let search=req.query.search
+    var regex = new RegExp(search, 'i');  // 'i' makes it case insensitive
+    await siteModel.find({ mobileNumber:req.user.mobileNumber, $text: { $search: regex} } , (err, docs) => {
+        if (docs) {
+          res.status(200).send({ data: docs });
+        } else res.send(err);
+      }).clone()
 }
-
-
-
-
 
 async function selectedSite(req,res){   
     
