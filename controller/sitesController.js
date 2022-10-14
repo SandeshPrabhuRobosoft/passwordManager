@@ -13,7 +13,7 @@ async function addSite(req,res){
         folder:req.body.folder,
         userName:req.body.userName,
         password: await cryptr.encrypt(req.body.password),
-        notes:abc()
+        notes:req.body.notes
     })
 
     site.save((err)=>{
