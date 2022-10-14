@@ -1,8 +1,6 @@
 const userModel=require('../models/user')
 const bcrypt = require('bcrypt')
-if(process.env.NODE_ENV !== 'production'){ // if dotenv module is installed as dev dependency
-    require('dotenv').config()
-}
+require('dotenv').config()
 
 async function signup(req,res){
     if(req.body.MPin.toString().length!=4) return res.send("Enter a valid 4-digit MPin")

@@ -1,6 +1,4 @@
-if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').config()
-}
+require('dotenv').config()
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr(process.env.PASSWORD_KEY) // for password encryption
 const siteModel=require('../models/sites')

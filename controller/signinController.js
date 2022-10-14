@@ -1,9 +1,7 @@
 const bcrypt = require('bcrypt')
 const userModel=require('../models/user')
 const jwt = require("jsonwebtoken");
-if(process.env.NODE_ENV !== 'production'){ // if dotenv module is installed as dev dependency
-    require('dotenv').config()
-}
+require('dotenv').config()
 
 async function signin(req, res) {
   const [user] = await userModel.find({mobileNumber: req.body.mobileNumber}).clone()
