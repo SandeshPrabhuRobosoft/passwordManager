@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const userModel=require('../models/user')
 const jwt = require("jsonwebtoken");
-const client=require('twilio')(/*accountSid*/"accountSid",/*authToken*/"authToken")
+// const client=require('twilio')(/*accountSid*/"accountSid",/*authToken*/"authToken")
 require('dotenv').config()
 
 async function signin(req, res) {
@@ -20,7 +20,7 @@ async function signin(req, res) {
     res.status(500).send()
   }
 }
-
+/*
 async function forgotPassword(req, res) {
   const [user] = await userModel.find({mobileNumber: req.body.mobileNumber}).clone()
   if (user == null)
@@ -38,7 +38,9 @@ async function forgotPassword(req, res) {
   //compareOTP()
   // if wrong otp return invalid
   //else
+  //proceed to login
 }
+*/
 
 
 async function refreshToken(req,res){
@@ -58,4 +60,5 @@ async function logout(req,res){ // to logout such that no more refresh tokens ca
   res.sendStatus(204)
 }
 
-module.exports={signin,forgotPassword,refreshToken,logout}
+
+module.exports={signin,/*forgotPassword,*/refreshToken,logout}
