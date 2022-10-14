@@ -2,7 +2,7 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
 const Cryptr = require('cryptr');
-const cryptr = new Cryptr(process.env.PASSWORD_KEY)
+const cryptr = new Cryptr(process.env.PASSWORD_KEY) // for password encryption
 const siteModel=require('../models/sites')
 
 async function addSite(req,res){
@@ -15,17 +15,15 @@ async function addSite(req,res){
         password: await cryptr.encrypt(req.body.password),
         notes:req.body.notes
     })
-
     site.save((err)=>{
-        if(err) return res.send(err)
+        if(err) return res.sendStatus(400).send(err)
         else {
-            res.send('Saved Successfully')
-    
+            res.sendStatus(202).send('Saved Successfully')
         }})
 }
 
-async function home(req,res){
-        let folder = req.body.folder
+async function home(req,res){ // home page showing sites of selected folder
+        let folder = req.body.folder || "Social Media" //default
         await siteModel.find({$and:[{folder:folder},{mobileNumber:req.user.mobileNumber}]},{__v:0,_id:0,mobileNumber:0}/*projection*/,function (err, documents)/*callback*/ {
             if (err)  return res.sendStatus(401).send(err)
             else{
@@ -40,10 +38,10 @@ async function home(req,res){
 async function search(req,res){
     let search=req.query.search
     var regex = new RegExp(search, 'i');  // 'i' makes it case insensitive
-    await siteModel.find({ mobileNumber:req.user.mobileNumber, $text: { $search: regex} } , (err, docs) => {
+    await siteModel.find({ mobileNumber:req.user.mobileNumber, $text: { $search: regex} } ,{__v:0,mobileNumber:0,_id:0}, (err, docs) => {
         if (docs) {
-          res.status(200).send({ data: docs });
-        } else res.send(err);
+          res.status(200).send(docs);
+        } else res.sendStatus(500).send(err);
       }).clone()
 }
 
@@ -64,14 +62,14 @@ async function selectedSite(req,res){
 async function editSite(req,res){
     const docs = await siteModel.find({_id:req.body._id},{__v:0,mobileNumber:0}/*projection*/,function (err)/*callback*/ {
         if (err)  return res.sendStatus(401).send(err)}).clone()
-    delete req.body._id;    //remove _id from body such that _id won't get updated
+    delete req.body._id;
+    delete req.body.mobileNumber;
+    //remove _id and mobileNumber from body such that _id won't get updated
     if(req.body.password) {req.body.password = await cryptr.encrypt(req.body.password)} //encryt password
     const data=await siteModel.findByIdAndUpdate({_id:docs[0]._id},req.body,function(err){
             if(err) console.log(err)}).clone()
     data.password= cryptr.decrypt(data.password)
-    res.send(data)
+    return res.send(data)
 }
-
-
 
 module.exports={addSite,home,search,selectedSite,editSite}

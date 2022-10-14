@@ -1,30 +1,18 @@
 const userModel=require('../models/user')
 const bcrypt = require('bcrypt')
-if(process.env.NODE_ENV !== 'production'){
+if(process.env.NODE_ENV !== 'production'){ // if dotenv module is installed as dev dependency
     require('dotenv').config()
 }
 
 async function signup(req,res){
     if(req.body.MPin.toString().length!=4) return res.send("Enter a valid 4-digit MPin")
-    const salt = await bcrypt.genSalt(Number(process.env.SALT));
-    const hashedPassword = await bcrypt.hash(req.body.MPin.toString(), salt)
+    const salt = await bcrypt.genSalt(Number(process.env.SALT)); // salt generation
+    const hashedPassword = await bcrypt.hash(req.body.MPin.toString(), salt) // bcrypting MPin
     const user = new userModel({ mobileNumber: req.body.mobileNumber, MPin: hashedPassword })
-//     let {mobileValidation, MPinValidation} = validation(user)
-//     if(mobileValidation==true && MPinValidation==true){
-//         user.save((err)=>{
-//             if(err){
-//                 res.send(err)
-//             }
-//         })
-//         res.send("successfull")
-//     }
-//     else{
-//         res.send({'mobileValidation':mobileValidation, 'MPinValidation':MPinValidation})///////////////////////////
-//     }
     await user.save((err)=>{
-        if(err) res.send(err)
+        if(err) res.sendStatus(400).send(err)
         else {
-            res.send('Congrats!!! Success\nSignin to access the vault')
+            res.sendStatus(202).send('Congrats!!! Success\nSignin to access the vault')
     
         }})
 }

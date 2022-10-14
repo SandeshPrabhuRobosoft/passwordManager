@@ -2,8 +2,6 @@ const mongoose=require('mongoose')
 var siteSchema = new mongoose.Schema({
     mobileNumber:{ 
         type:Number
-        // type:mongoose.Schema.Types.ObjectId,
-        //  ref:'userCollection'
         },
     URL: { 
         type: String,
@@ -29,5 +27,5 @@ var siteSchema = new mongoose.Schema({
         type: String,
     }
   })
-  siteSchema.index({'$**': 'text'})
+  siteSchema.index({'$**': 'text'}) // creating index for text
   module.exports = mongoose.model('siteCollection', siteSchema);
