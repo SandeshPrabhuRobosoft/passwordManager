@@ -14,7 +14,7 @@ async function signin(req, res) {
     // const refreshToken=jwt.sign(user,process.env.REFRESH_TOKEN_SECRET)
 		res.status(200).send({ token: token, message: "logged in successfully" }); 
     } else {
-      res.sendStatus(401).send('Not Allowed')
+      res.status(401).send('Not Allowed')
     }
   } catch {
     res.status(500).send()

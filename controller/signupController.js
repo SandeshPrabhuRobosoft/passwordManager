@@ -8,9 +8,9 @@ async function signup(req,res){
     const hashedPassword = await bcrypt.hash(req.body.MPin.toString(), salt) // bcrypting MPin
     const user = new userModel({ mobileNumber: req.body.mobileNumber, MPin: hashedPassword })
     await user.save((err)=>{
-        if(err) res.sendStatus(400).send(err)
+        if(err) res.send(err)
         else {
-            res.sendStatus(202).send('Congrats!!! Success\nSignin to access the vault')
+            res.send('Congrats!!! Success\nSignin to access the vault')
     
         }})
 }

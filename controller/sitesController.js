@@ -14,16 +14,17 @@ async function addSite(req,res){
         notes:req.body.notes
     })
     site.save((err)=>{
-        if(err) return res.sendStatus(400).send(err)
+        if(err) return res.status(400).send(err)
         else {
-            res.sendStatus(202).send('Saved Successfully')
+            res.send('Saved Successfully')
         }})
 }
 
 async function home(req,res){ // home page showing sites of selected folder
         let folder = req.body.folder || "Social Media" //default
+        if(folder!="All"){
         await siteModel.find({$and:[{folder:folder},{mobileNumber:req.user.mobileNumber}]},{__v:0,_id:0,mobileNumber:0}/*projection*/,function (err, documents)/*callback*/ {
-            if (err)  return res.sendStatus(401).send(err)
+            if (err)  return res.status(401).send(err)
             else{
                 if(documents.length==0){
                     return res.send(`No sites in ${folder} category!`)
@@ -31,6 +32,18 @@ async function home(req,res){ // home page showing sites of selected folder
                 documents.map(docs=>docs.password= cryptr.decrypt(docs.password))
                 return res.send(documents)
             } }).clone()
+        }
+        else{
+            await siteModel.find({mobileNumber:req.user.mobileNumber},{__v:0,_id:0,mobileNumber:0}/*projection*/,function (err, documents)/*callback*/ {
+                if (err)  return res.status(401).send(err)
+                else{
+                    if(documents.length==0){
+                        return res.send(`No sites in ${folder} category!`)
+                    }
+                    documents.map(docs=>docs.password= cryptr.decrypt(docs.password))
+                    return res.send(documents)
+                } }).clone()
+            }
 }
 
 async function search(req,res){
@@ -38,8 +51,9 @@ async function search(req,res){
     var regex = new RegExp(search, 'i');  // 'i' makes it case insensitive
     await siteModel.find({ mobileNumber:req.user.mobileNumber, $text: { $search: regex} } ,{__v:0,mobileNumber:0,_id:0}, (err, docs) => {
         if (docs) {
-          res.status(200).send(docs);
-        } else res.sendStatus(500).send(err);
+            docs.map(documents=>documents.password= cryptr.decrypt(documents.password))
+            res.status(200).send(docs);
+        } else res.status(500).send(err);
       }).clone()
 }
 
@@ -49,17 +63,17 @@ async function selectedSite(req,res){
     // await siteModel.find({$and:[{mobileNumber:req.user.mobileNumber},{siteName:req.body.siteName},{userName:req.body.userName}]},{__v:0,_id:0,mobileNumber:0}/*projection*/,function (err, documents)/*callback*/ {
     
     // opening selected site details using the _id received by post method
-    await siteModel.find({_id:req.body._id},{__v:0,_id:0,mobileNumber:0}/*projection*/,function (err, documents)/*callback*/ {
-            if (err)  return res.sendStatus(401).send(err)
+    await siteModel.find({$and:[{_id:req.body._id},{mobileNumber:req.user.mobileNumber}]},{__v:0,_id:0,mobileNumber:0}/*projection*/,function (err, documents)/*callback*/ {
+            if (err)  return res.status(401).send(err)
         else {
-            documents.map(docs=>docs.password= cryptr.decrypt(docs.password))
+            documents.map(docs=>docs.password= cryptr.decrypt(docs.password))   
             return res.send(documents)
         }}).clone()
 }
 
 async function editSite(req,res){
     const docs = await siteModel.find({_id:req.body._id},{__v:0,mobileNumber:0}/*projection*/,function (err)/*callback*/ {
-        if (err)  return res.sendStatus(401).send(err)}).clone()
+        if (err)  return res.send(err)}).clone()
     delete req.body._id;
     delete req.body.mobileNumber;
     //remove _id and mobileNumber from body such that _id won't get updated
@@ -70,4 +84,12 @@ async function editSite(req,res){
     return res.send(data)
 }
 
-module.exports={addSite,home,search,selectedSite,editSite}
+async function deleteSite(req,res){   
+    await siteModel.deleteOne({_id:req.body._id},function (err, documents)/*callback*/ {
+            if (err)  return res.status(401).send(err)
+        else {
+            return res.send("Site deleted")
+        }}).clone()
+}
+
+module.exports={addSite,home,search,selectedSite,editSite,deleteSite}
