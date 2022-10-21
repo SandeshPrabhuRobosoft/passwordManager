@@ -1,14 +1,14 @@
 const express=require('express')
 const authorization=require('../middleware/authorization')
 const signup=require('../controller/signupController')
-const {signin,/*forgotPassword,*/refreshToken,logout}=require('../controller/signinController')
+const {signin/*,forgotPassword,refreshToken,logout*/}=require('../controller/signinController')
 const {addSite,home,search,selectedSite,editSite,deleteSite}=require('../controller/sitesController')
-
+const {GetNewAccessToken,logout}=require('./refreshToken')
 const router=express.Router()
 
 router.post('/signup',signup)
 router.post('/signin',signin)
-router.post('/refreshToken',refreshToken)
+router.post('/refreshToken',GetNewAccessToken)
 router.delete('/logout',logout)
 router.delete('/deleteSite',authorization,deleteSite)
 // router.post('/forgotPassword',forgotPassword)
