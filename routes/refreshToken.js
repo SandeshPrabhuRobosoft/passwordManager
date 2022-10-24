@@ -24,7 +24,6 @@ async function GetNewAccessToken(req, res) {
 };
 
 // logout
-// router.delete("/", async (req, res) => {
 async function logout(req, res) {
 	try {
 
@@ -32,7 +31,7 @@ async function logout(req, res) {
 		if (!userToken)
 			return res
 				.status(200)
-				.json({ error: false, message: "Logged Out Sucessfully" });
+				.json({ error: false, message: "logged Out Sucessfully" });
 
 		await userToken.remove();
 		res.status(200).json({ error: false, message: "Logged Out Sucessfully" });
@@ -40,6 +39,5 @@ async function logout(req, res) {
 		res.status(500).json({ error: true, message: "Internal Server Error" });
 	}
 };
-
 
 module.exports={GetNewAccessToken,logout}

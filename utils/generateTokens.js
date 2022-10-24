@@ -6,7 +6,7 @@ const generateTokens = async (user) => {
 		const accessToken = jwt.sign(
 			{mobileNumber: user.mobileNumber },
 			process.env.JWTPRIVATEKEY,
-			{ expiresIn: "1d" }
+			{ expiresIn: "10m" }
 		);
 		const refreshToken = jwt.sign(
 			{mobileNumber: user.mobileNumber },
