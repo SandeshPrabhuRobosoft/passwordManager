@@ -7,9 +7,9 @@ const verifyRefreshToken = (refreshToken) => {
 	return new Promise((resolve, reject) => {
 		UserToken.findOne({ refreshToken: refreshToken}, (err, doc) => {
 			if (!doc)
-				return reject({ error: true, message: "Invalid refresh token" });
+				return reject({ error: true, message: "Invalid refresh token" });  // if there is no document to verify refresh token then return error response
 
-			jwt.verify(refreshToken.toString(), privateKey.toString(), (err, tokenDetails) => {
+			jwt.verify(refreshToken.toString(), privateKey.toString(), (err, tokenDetails) => { // compare refresh tokens
 				if (err)
 					return reject({ error: true, message: "Invalid refresh token" });
 				resolve({

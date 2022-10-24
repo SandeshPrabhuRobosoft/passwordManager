@@ -15,9 +15,9 @@ const generateTokens = async (user) => {
 		);
 
 		const userToken = await UserToken.findOne({ mobileNumber: user.mobileNumber  });
-		if (userToken) await userToken.remove();
+		if (userToken) await userToken.remove(); // remove matched document with old refresh token
 
-		await new UserToken({ mobileNumber: user.mobileNumber, refreshToken: refreshToken }).save();
+		await new UserToken({ mobileNumber: user.mobileNumber, refreshToken: refreshToken }).save(); // create new document with new refresh token
 		return Promise.resolve({ accessToken, refreshToken });
 	} catch (err) {
 		return Promise.reject(err);

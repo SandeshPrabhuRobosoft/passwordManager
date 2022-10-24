@@ -1,7 +1,7 @@
 const express=require('express')
 const authorization=require('../middleware/authorization')
 const signup=require('../controller/signupController')
-const {signin/*,forgotPassword,refreshToken,logout*/}=require('../controller/signinController')
+const {signin/*,forgotPassword*/}=require('../controller/signinController')
 const {addSite,home,search,selectedSite,editSite,deleteSite}=require('../controller/sitesController')
 const {GetNewAccessToken,logout}=require('./refreshToken')
 const router=express.Router()
@@ -17,6 +17,6 @@ router.post('/home',authorization,home)
 router.get('/home',authorization,search)
 router.post('/home/selectedSite',authorization,selectedSite)
 router.post('/home/selectedSite/editSite',authorization,editSite)
-router.get('/sync',authorization,home)
+router.get('/sync',authorization,home) // get all the site documents of the user
 
 module.exports=router

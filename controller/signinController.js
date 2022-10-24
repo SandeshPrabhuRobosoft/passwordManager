@@ -11,9 +11,7 @@ async function signin(req, res) {
     return res.status(404).send('Cannot find user')
   try {
     if(await bcrypt.compare(req.body.MPin.toString(), user.MPin)) { //compare MPin 
-    const tokens =await generateTokens(user)
-    //const token = jwt.sign({ mobileNumber: user.mobileNumber }, process.env.  , {expiresIn: "7d",}); // token signing using mobileNumber
-    // const refreshToken=jwt.sign(user,process.env.REFRESH_TOKEN_SECRET)
+    const tokens =await generateTokens(user) // function call to generate tokens 
 		res.status(200).send({ token: tokens, message: "logged in successfully" }); 
     } else {
       res.status(401).send('Not Allowed')
@@ -44,23 +42,4 @@ async function forgotPassword(req, res) {
 }
 */
 
-
-// async function refreshToken(req,res){
-// let accessToken=req.headers["authorization"].split(" ")[1]
-//   let refreshToken=process.env.REFRESH_TOKEN_SECRET
-//   if(refreshToken==null) return res.sendStatus(401)
-//   if(!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
-//   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err,user)=>{
-//       if(err) return res.sendStatus(403)
-//       // const accessToken=generateAccessToken({name:user.name}) // for security entire user is not sent, only username is sent
-//       res.json({accessToken:accessToken})
-//   })
-// }
-
-// async function logout(req,res){ // to logout such that no more refresh tokens can be created
-//   refreshTokens=refreshTokens.filter(token=>token!==req.body.token)
-//   res.sendStatus(204)
-// }
-
-
-module.exports={signin/*,forgotPassword,refreshToken,logout*/}
+module.exports={signin/*,forgotPassword*/}
