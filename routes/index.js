@@ -3,7 +3,7 @@ const authorization=require('../middleware/authorization')
 const signup=require('../controller/signupController')
 const {signin/*,forgotPassword*/}=require('../controller/signinController')
 const {addSite,home,search,selectedSite,editSite,deleteSite}=require('../controller/sitesController')
-const {GetNewAccessToken,logout}=require('./refreshToken')
+const {GetNewAccessToken,logout}=require('../controller/refreshToken')
 const router=express.Router()
 
 router.post('/signup',signup)
