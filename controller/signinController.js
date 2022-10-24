@@ -12,7 +12,6 @@ async function signin(req, res) {
   try {
     if(await bcrypt.compare(req.body.MPin.toString(), user.MPin)) { //compare MPin 
     const tokens =await generateTokens(user)
-    console.log(tokens)
     //const token = jwt.sign({ mobileNumber: user.mobileNumber }, process.env.  , {expiresIn: "7d",}); // token signing using mobileNumber
     // const refreshToken=jwt.sign(user,process.env.REFRESH_TOKEN_SECRET)
 		res.status(200).send({ token: tokens, message: "logged in successfully" }); 

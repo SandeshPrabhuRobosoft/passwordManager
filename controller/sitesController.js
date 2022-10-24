@@ -40,7 +40,7 @@ async function home(req,res){ // home page showing sites of selected folder
 async function search(req,res){
     let search=req.query.search
     var regex = new RegExp(search, 'i');  // 'i' makes it case insensitive
-    await siteModel.find({ mobileNumber:req.user.mobileNumber, $text: { $search: regex} } ,{__v:0,mobileNumber:0,_id:0}, (err, docs) => {
+    await siteModel.find({$and:[{ mobileNumber:req.user.mobileNumber, $text: { $search: regex} } ]},{__v:0,mobileNumber:0,_id:0}, (err, docs) => {
         if (docs) {
             docs.map(documents=>documents.password= cryptr.decrypt(documents.password))
             res.status(200).send(docs);

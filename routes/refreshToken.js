@@ -4,24 +4,23 @@ const verifyRefreshToken = require('../utils/verifyRefreshToken.js');
 
 // get new access token
 async function GetNewAccessToken(req, res) {
-	verifyRefreshToken(req.body.refreshToken)
-		.then(() => {
-            console.log("hi")
-			const accessToken = jwt.sign(
-				{mobileNumber: tokenDetails.mobileNumber },
-				process.env.JWTPRIVATEKEY,
-				{ expiresIn: "14m" }
-			);
-            
-			res.status(200).json({
-				error: false,
-				accessToken,
-				message: "Access token created successfully",
-			});
-            
-		})
-		.catch((err) => res.status(400).json(err));
-        
+	try{
+		const response = await verifyRefreshToken(req.body.refreshToken).catch((err)=>res.send(err))
+
+		const accessToken = jwt.sign(
+			{mobileNumber: response.tokenDetails.mobileNumber },
+			process.env.JWTPRIVATEKEY,
+			{ expiresIn: "14m" }
+		);
+		res.status(200).json({
+			error: false,
+			accessToken,
+			message: "Access token created successfully",
+		});
+	}
+	catch{
+		((err) => res.status(400).json(err));
+	}
 };
 
 // logout
