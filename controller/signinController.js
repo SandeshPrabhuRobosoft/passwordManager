@@ -1,9 +1,7 @@
 const bcrypt = require('bcrypt')
 const userModel=require('../models/user')
-const jwt = require('jsonwebtoken');
 const speakeasy = require('speakeasy')
 const generateTokens = require("../utils/generateTokens");
-// const client=require('twilio')(/*accountSid*/"accountSid",/*authToken*/"authToken")
 require('dotenv').config()
 
 async function signin(req, res) {
@@ -29,10 +27,10 @@ async function generateOTP(req, res) {
     "token": speakeasy.totp({
         secret: secret.base32,
         encoding: "base32",
-        step: 30
+        step: 60
     }),
     "secret":secret.base32,
-    "secretData":secret
+    // "secretData":secret
 })
  } catch (error) {
   console.log(error)
@@ -41,22 +39,5 @@ async function generateOTP(req, res) {
  } 
  
 }
-async function verifyOTP(req, res) {
- try {
-  res.send({
-    "valid": speakeasy.totp.verify({
-      secret: req.body.secret,
-      encoding: "base32",
-      token: req.body.token,
-      window: 0,
-      step: 30
-  })
-})
- } catch (error) {
-  console.log(error)
-  res.status(500).send()
 
- } 
-}
-
-module.exports={signin,generateOTP,verifyOTP}
+module.exports={signin,generateOTP}
