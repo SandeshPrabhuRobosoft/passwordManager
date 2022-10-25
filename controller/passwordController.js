@@ -32,7 +32,7 @@ async function addNewMPin(req,res){
     try {
         const salt = await bcrypt.genSalt(Number(process.env.SALT)); // salt generation
         const hashedPassword = await bcrypt.hash(req.body.newMPin.toString(), salt) // bcrypting MPin
-        await userModel.findOneAndUpdate({ mobileNumber: req.user.mobileNumber},{ MPin: hashedPassword },(err)=>{ //Update in database
+        await userModel.findOneAndUpdate({ mobileNumber: req.body.mobileNumber},{ MPin: hashedPassword },(err)=>{ //Update in database
             if(err) return res.send(err)
         }).clone();
         res.status(200).send("MPin successfully Updated")

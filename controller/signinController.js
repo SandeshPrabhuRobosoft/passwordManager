@@ -13,7 +13,7 @@ async function signin(req, res) {
     const tokens =await generateTokens(user) // function call to generate tokens 
 		res.status(200).send({ accessToken: tokens.accessToken, message: "logged in successfully" }); 
     } else {
-      res.status(401).send('Not Allowed')
+      res.status(401).send('Incorrect Password')
     }
   } catch {
     res.status(500).send()
