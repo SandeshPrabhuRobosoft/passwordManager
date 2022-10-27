@@ -84,4 +84,13 @@ async function deleteSite(req,res){
     return res.send("Site deleted")}).clone()
 }
 
-module.exports={addSite,home,search,selectedSite,editSite,deleteSite}
+async function allFolders(req,res){ // 
+    await siteModel.find({mobileNumber:req.user.mobileNumber}).distinct('folder', function(err, folderList) {
+        // ids is an array of all ObjectIds
+        if (err)  return res.status(401).send(err)
+        else{
+            return res.send(folderList)
+        } }).clone()
+}
+
+module.exports={addSite,home,search,selectedSite,editSite,deleteSite,allFolders}

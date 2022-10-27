@@ -27,14 +27,14 @@ async function signin(req, res) {
 async function generateOTP(req, res) {
  try {
   const secret = speakeasy.generateSecret({length: 10})
-  res.send({
-    "token": speakeasy.totp({
-        secret: secret.base32,
-        encoding: "base32",
-        step: 60
-    }),
-    "secret":secret.base32,
-    // "secretData":secret
+res.send({
+  "token": speakeasy.totp({ //Time-based one-time password
+      secret: secret.base32,
+      encoding: "base32",
+      step: 60
+  }),
+  "secret":secret.base32,
+  // "secretData":secret
 })
  } catch (error) {
   res.status(500).send()
