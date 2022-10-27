@@ -10,7 +10,7 @@ const verifyOTP=require('../middleware/verifyOTP')
 
 router.post('/signup',signup)
 router.post('/signin',signin)
-router.post('/refreshToken',authorization,GetNewAccessToken)
+router.post('/refreshToken',GetNewAccessToken)
 router.delete('/logout',authorization,logout)
 router.delete('/deleteSite',authorization,deleteSite)
 router.get('/generateOTP',generateOTP)
