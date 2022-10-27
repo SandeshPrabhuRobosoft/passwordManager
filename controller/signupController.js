@@ -3,16 +3,17 @@ const bcrypt = require('bcrypt')
 require('dotenv').config()
 
 async function signup(req,res){
+    if(typeof req.body.mobileNumber!="number") return res.send("Enter a valid 10-digit Mobile Number")
+    if(req.body.mobileNumber.toString().length!=10) return res.send("Enter a valid 10-digit Mobile Number")
+    if(typeof req.body.MPin!="number") return res.send("Enter a valid 4-digit MPin")
     if(req.body.MPin.toString().length!=4) return res.send("Enter a valid 4-digit MPin")
     const salt = await bcrypt.genSalt(Number(process.env.SALT)); // salt generation
     const hashedPassword = await bcrypt.hash(req.body.MPin.toString(), salt) // bcrypting MPin
     const user = new userModel({ mobileNumber: req.body.mobileNumber, MPin: hashedPassword })
     await user.save((err)=>{
         if(err) res.send(err)
-        else {
-            res.send('Congrats!!! Success\nSignin to access the vault')
-    
-        }})
+        else res.send('Congrats!!! Success\nSignin to access the vault')
+    })
 }
 
 module.exports=signup

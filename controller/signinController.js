@@ -5,6 +5,10 @@ const generateTokens = require("../utils/generateTokens");
 require('dotenv').config()
 
 async function signin(req, res) {
+  if(typeof req.body.mobileNumber!="number") return res.send("Enter a valid 10-digit Mobile Number")
+  if(req.body.mobileNumber.toString().length!=10) return res.send("Enter a valid 10-digit Mobile Number")
+  if(typeof req.body.MPin!="number") return res.send("Enter a valid 4-digit MPin")
+  if(req.body.MPin.toString().length!=4) return res.send("Enter a valid 4-digit MPin")
   const [user] = await userModel.find({mobileNumber: req.body.mobileNumber}).clone()
   if (user == null)
     return res.status(404).send('Cannot find user')
@@ -33,7 +37,6 @@ async function generateOTP(req, res) {
     // "secretData":secret
 })
  } catch (error) {
-  console.log(error)
   res.status(500).send()
 
  } 

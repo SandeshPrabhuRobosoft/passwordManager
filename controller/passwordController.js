@@ -3,10 +3,13 @@ const bcrypt = require('bcrypt')
 require('dotenv').config()
 
 async function resetMPin(req,res){
-    const newMPin = req.body.newMPin.toString()
-    const oldMPin = req.body.oldMPin.toString()
-    if(newMPin.length!=4) return res.send("Enter a valid 4-digit new MPin")
-    if(oldMPin.length!=4) return res.send("Enter a valid 4-digit old MPin")
+    if(typeof req.body.oldMPin!="number") return res.send("Enter a valid 4-digit old MPin")
+    if(typeof req.body.newMPin!="number") return res.send("Enter a valid 4-digit new MPin")
+    if(req.body.oldMPin==req.body.newMPin) return res.send("New MPin cannot be same as old MPin")
+    // const newMPin = req.body.newMPin.toString()
+    // const oldMPin = req.body.oldMPin.toString()
+    if(req.body.newMPin.toString().length!=4) return res.send("Enter a valid 4-digit new MPin")
+    if(req.body.oldMPin.toString().length!=4) return res.send("Enter a valid 4-digit old MPin")
     const [userData] = await userModel.find({mobileNumber: req.user.mobileNumber}).clone()
     try {
         if(await bcrypt.compare(req.body.oldMPin.toString(), userData.MPin.toString())) { //compare MPin 

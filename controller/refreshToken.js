@@ -27,7 +27,7 @@ async function GetNewAccessToken(req, res) {
 async function logout(req, res) {
 	try {
 
-		const userToken = await UserToken.findOne({ refreshToken: req.body.refreshToken }); // finding document with the matched refresh token  
+		const userToken = await UserToken.findOne({$and:[{ refreshToken: req.body.refreshToken },{mobileNumber:req.user.mobileNumber}]}); // finding document with the matched refresh token  
 		if (!userToken)
 			return res
 				.status(200)
