@@ -5,13 +5,12 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required:true,
         unique:true, // to keep unique (key)
-        validate: {
+        /*validate: {
             validator: function(v){
                 return /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(v) // validation for different format : XXX XXX XXXX, XXX-XXX-XXXX, XXXXXXXXXX, etc.
               },
             message: '{VALUE} is not a valid 10 digit number!'
-        },
-        required:true,
+        },*/
     },
     MPin: {
         type: String,
