@@ -8,7 +8,6 @@ async function verifyOTP(req, res, next) {
          window: 0,
          step: 60
      })
-     console.log(valid)
      if(!valid) return res.send("OTP Verification failed")
     } catch (error) {
      res.status(500).send()

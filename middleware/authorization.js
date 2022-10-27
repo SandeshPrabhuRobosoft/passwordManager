@@ -8,8 +8,8 @@ function authorizeToken(req,res,next){
     jwt.verify(token,process.env.JWTPRIVATEKEY,(err,user)=>{
         if(err) return res.status(401).send(err)
         req.user=user // add authorized user to request
+        next();
     })
-    next();
 }
 
 module.exports = authorizeToken;
